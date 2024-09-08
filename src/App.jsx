@@ -6,7 +6,7 @@ import Profile from './pages/profile'
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/auth",
+      path: "/",
       element: <Auth />
     },
     {
