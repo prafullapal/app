@@ -15,9 +15,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useNavigate } from "react-router-dom";
+import { useAppStore } from "@/store";
 
 export default function LogIn() {
   const navigate = useNavigate();
+  const {setUserInfo} = useAppStore();
   const form = useForm({
     defaultValues: {
       email: "",
@@ -30,9 +32,11 @@ export default function LogIn() {
       const response = await apiClient.post(LOGIN_ROUTE, values);
       if (response.status === 200) {
         toast.success("Login successful");
-        if(response.data.user.setupProfile) 
-        navigate("/profile");
-        else navigate("/chat");
+        console.log(response);
+        setUserInfo(response.data.data);
+        if(response.data.data.profileSetup) 
+          navigate("/chat");
+        else navigate("/profile");
       }
     } catch (error) {
       toast.error("Login failed");
