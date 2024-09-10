@@ -11,14 +11,14 @@ import { USER_INFO_ROUTE } from "./utils/constants";
 function ProtectedRoutes({ children }) {
   const { userInfo } = useAppStore();
   const navigate = useNavigate();
-  const isAuthenticated = !!userInfo;
+  const isAuthenticated = userInfo && userInfo.email;
 
   useEffect(() => {
+    console.log(userInfo)
     if (!isAuthenticated) {
-      navigate("/");
+      return navigate("/");
     }
   }, [isAuthenticated, navigate]);
-
 
   return isAuthenticated ? children : null;
 }
