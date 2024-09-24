@@ -10,3 +10,6 @@ export const USER_INFO_ROUTE = `${AUTH_ROUTE}/user-info`;
 
 export const LOGIN_ROUTE = `${AUTH_ROUTE}/login`;
 export const LOGOUT_ROUTE = `${AUTH_ROUTE}/logout`;
+
+export const CONTACTS_ROUTE = `${API}/contacts`;
+export const SEARCH_CONTACTS_ROUTE = `${CONTACTS_ROUTE}/search`;
