@@ -14,7 +14,6 @@ function ProtectedRoutes({ children }) {
   const isAuthenticated = userInfo && userInfo.email;
 
   useEffect(() => {
-    console.log(userInfo)
     if (!isAuthenticated) {
       return navigate("/");
     }
@@ -25,9 +24,16 @@ function ProtectedRoutes({ children }) {
 
 function AuthRoute({ children }) {
   const { userInfo } = useAppStore();
+  const navigate = useNavigate();
   const isAuthenticated = !!userInfo;
 
-  return isAuthenticated ? <Chat /> : children;
+  useEffect(() => {
+    if (isAuthenticated) {
+      return navigate("/chat");
+    }
+  }, [isAuthenticated, navigate]);
+
+  return isAuthenticated ? null : children;
 }
 
 function App() {
@@ -37,9 +43,8 @@ function App() {
     const getUserData = async ()  => {
       try{
         const response = await apiClient.get(USER_INFO_ROUTE);
-        if(response.status === 200) {
-          const data = await response.data?.data;
-          setUserInfo(data);
+        if(response.status === 200 && response.data.data) {
+          setUserInfo({...response.data.data});
         }
       } catch(error) {
         console.log(error);
@@ -81,6 +86,10 @@ function App() {
       ),
     },
   ]);
+
+  if(loading) {
+    return <div>Loading...</div>
+  }
 
   return <RouterProvider router={router} />;
 }

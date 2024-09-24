@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { FaTrash, FaPlus } from "react-icons/fa";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { colors, getColor, SETUP_PROFILE_ROUTE } from "@/utils/constants";
+import { SETUP_PROFILE_ROUTE } from "@/utils/constants";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { apiClient } from "@/lib/api-client";
+import { colors, getColor } from "@/lib/utils";
 
 export default function Profile() {
   const { userInfo, setUserInfo } = useAppStore();
@@ -45,7 +46,7 @@ export default function Profile() {
         });
 
         if(response.status === 200 && response.data) {
-          setUserInfo({...response.data})
+          setUserInfo({...response.data.data})
           toast.success("Profile updated successfully");
           navigate("/chat");
         }
@@ -60,6 +61,7 @@ export default function Profile() {
 
   const handleBackBtn = (e) => {
     e.preventDefault();
+    console.log(userInfo);
     if(userInfo.profilSetup)
     navigate("/chat");
     else
