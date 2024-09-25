@@ -3,9 +3,13 @@ import { IoSend } from "react-icons/io5";
 import { RiEmojiStickerLine } from "react-icons/ri";
 import { GrAttachment } from "react-icons/gr";
 import EmojiPicker from "emoji-picker-react";
+import { useSocket } from "@/context/SocketContext";
+import { useAppStore } from "@/store";
 
 const MessageBar = () => {
   const emojiRef = useRef();
+  const socket = useSocket();
+  const { selectedChatType, selectedChatData, userInfo } = useAppStore();
   const [message, setMessage] = useState("");
   const [emojiPickerShow, setEmojiPickerShow] = useState(false);
 
@@ -14,7 +18,7 @@ const MessageBar = () => {
       if (emojiRef.current && !emojiRef.current.contains(e.target)) {
         setEmojiPickerShow(false);
       }
-    }
+    };
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -25,8 +29,16 @@ const MessageBar = () => {
     setMessage((message) => message + emoji.emoji);
   };
 
-  const sendMessage = async () => {
-    console.log(message);
+  const handleSendMessage = async () => {
+    if (selectedChatType === "contact") {
+      socket.emit("sendMessage", {
+        sender: userInfo._id,
+        recipient: selectedChatData._id,
+        content: message,
+        messageType: "text",
+        fileUrl: undefined,
+      });
+    }
     setMessage("");
   };
 
@@ -59,7 +71,7 @@ const MessageBar = () => {
         </div>
         <button
           className="bg-[#8417ff] rounded-md flex items-center p-5 hover:bg-[#741bda] focus:bg-[#741bda] focus:border-none focus:outline-none focus:text-white duration-300 transition-all"
-          onClick={sendMessage}
+          onClick={handleSendMessage}
         >
           <IoSend className="text-2xl" />
         </button>
