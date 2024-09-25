@@ -1,12 +1,35 @@
+import { apiClient } from "@/lib/api-client";
 import { useAppStore } from "@/store";
+import { GET_ALL_MESSAGES_ROUTE } from "@/utils/constants";
 import moment from "moment";
 import React, { useEffect, useRef } from "react";
 
 const MessageContainer = () => {
   const scrollRef = useRef();
-  const { selectedChatType, selectedChatData, selectedChatMessages, userInfo } =
+  const { selectedChatType, selectedChatData, selectedChatMessages, userInfo, setSelectedChatMessages } =
     useAppStore();
 
+
+    useEffect(() => {
+      const getMessages = async () => {
+        try {
+          const response = await apiClient.post(GET_ALL_MESSAGES_ROUTE, {
+            userId: selectedChatData._id}
+            , {withCredentials: true});
+
+            if(response.data.data) {
+              setSelectedChatMessages(response.data.data);
+            }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      if(selectedChatData._id) {
+        if(selectedChatType === "contact") getMessages();
+      }
+    }, [selectedChatData, selectedChatType, setSelectedChatMessages]);
+  
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });

@@ -21,7 +21,6 @@ import { apiClient } from "@/lib/api-client";
 import { HOST, SEARCH_CONTACTS_ROUTE } from "@/utils/constants";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { set } from "react-hook-form";
 import { useAppStore } from "@/store";
 
 function NewDM() {
