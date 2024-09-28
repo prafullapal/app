@@ -17,3 +17,4 @@ export const GET_CONTACTS_FOR_DM_ROUTE = `${CONTACTS_ROUTE}/get-contacts-for-dm`
 
 export const MESSAGES_ROUTE = `${API}/messages`;
 export const GET_ALL_MESSAGES_ROUTE = `${MESSAGES_ROUTE}/get-messages`;
+export const UPLOAD_FILE_ROUTE = `${MESSAGES_ROUTE}/upload-file`;
