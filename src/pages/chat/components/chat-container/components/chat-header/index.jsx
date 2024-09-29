@@ -12,31 +12,41 @@ const ChatHeader = () => {
       <div className="flex items-center w-full justify-between">
         <div className="flex gap-3 items-center justify-center">
           <div className="w-12 h-12 relative">
-            <Avatar className="h-12 w-12 rounded-full overflow-hidden">
-              <AvatarImage
-                src={`${HOST}/${selectedChatData.image}`}
-                alt="profile"
-                className="object-cover bg-black w-full h-full"
-              />
-              <AvatarFallback
-                className={`h-12 w-12 text-lg border-[1px] bg-[#1b1c24] text-white/90 flex items-center  justify-center  rounded-full ${getColor(
-                  selectedChatData.color
-                )}`}
-              >
-                {selectedChatData.firstName
-                  ? selectedChatData.firstName
-                      .split("")
-                      .shift()
-                      .toLocaleUpperCase()
-                  : selectedChatData.email
-                      .split("")
-                      .shift()
-                      .toLocaleUpperCase()}
-              </AvatarFallback>
-            </Avatar>
+            {selectedChatType === "contact" ? (
+              <Avatar className="h-12 w-12 rounded-full overflow-hidden">
+                <AvatarImage
+                  src={`${HOST}/${selectedChatData.image}`}
+                  alt="profile"
+                  className="object-cover bg-black w-full h-full"
+                />
+                <AvatarFallback
+                  className={`h-12 w-12 text-lg border-[1px] bg-[#1b1c24] text-white/90 flex items-center  justify-center  rounded-full ${getColor(
+                    selectedChatData.color
+                  )}`}
+                >
+                  {selectedChatData.firstName
+                    ? selectedChatData.firstName
+                        .split("")
+                        .shift()
+                        .toLocaleUpperCase()
+                    : selectedChatData.email
+                        .split("")
+                        .shift()
+                        .toLocaleUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            ) : (
+              <Avatar className="h-12 w-12 rounded-full overflow-hidden">
+                <AvatarFallback
+                  className={`h-12 w-12 text-lg border-[1px] bg-[#1b1c24] text-white/90 flex items-center  justify-center  rounded-full`}
+                >
+                  #
+                </AvatarFallback>
+              </Avatar>
+            )}
           </div>
           <div className="flex flex-col">
-            {selectedChatType === "contact" && (
+            {selectedChatType === "contact" ? (
               <>
                 <span>
                   {selectedChatData.firstName && selectedChatData.lastName
@@ -44,6 +54,13 @@ const ChatHeader = () => {
                     : `${selectedChatData.email}`}
                 </span>
                 <span className="text-xs">{selectedChatData.email}</span>
+              </>
+            ) : (
+              <>
+                <span>{selectedChatData.name}</span>
+                <span className="text-xs">
+                  {selectedChatData.members.length + 1} Members
+                </span>
               </>
             )}
           </div>

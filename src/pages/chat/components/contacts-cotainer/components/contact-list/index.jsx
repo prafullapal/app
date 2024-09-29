@@ -33,7 +33,7 @@ function ContactList({ contacts, isChannel = false }) {
           }`}
         >
           <div className="flex gap-5 items-center justify-start text-neutral-300">
-            {!isChannel && (
+            {!isChannel ? (
               <>
                 <Avatar className="h-10 w-10 rounded-full overflow-hidden">
                   <AvatarImage
@@ -56,6 +56,24 @@ function ContactList({ contacts, isChannel = false }) {
                     {contact.firstName && contact.lastName
                       ? `${contact.firstName} ${contact.lastName}`
                       : `${contact.email}`}
+                  </span>
+                  {/* <span className="text-4xl">
+                    <LuDot color="green" />
+                  </span> */}
+                </div>
+              </>
+            ): (
+              <>
+                <Avatar className="h-10 w-10 rounded-full overflow-hidden">
+                  <AvatarFallback
+                    className={`h-10 w-10 text-lg border-[1px] bg-[#1b1c24] text-white/90 flex items-center justify-center rounded-full`}
+                  >
+                    #
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-row items-center">
+                  <span>
+                    {contact.name}
                   </span>
                   {/* <span className="text-4xl">
                     <LuDot color="green" />

@@ -1,5 +1,5 @@
 import { useAppStore } from "@/store";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { FaTrash, FaPlus } from "react-icons/fa";
@@ -15,29 +15,29 @@ export default function Profile() {
   const { userInfo, setUserInfo } = useAppStore();
   const navigate = useNavigate();
 
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
-  const [image, setImage] = React.useState(null);
-  const [hovered, setHovered] = React.useState(false);
-  const [selectedColor, setSelectedColor] = React.useState(0);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [image, setImage] = useState(null);
+  const [hovered, setHovered] = useState(false);
+  const [selectedColor, setSelectedColor] = useState(0);
 
-  useEffect(() => { 
-    if(userInfo.profilSetup) {
-      setFirstName(userInfo.firstName);
-      setLastName(userInfo.lastName);
-      setSelectedColor(userInfo.color);
+  useEffect(() => {
+    if (userInfo?.profilSetup) {
+      setFirstName(userInfo?.firstName);
+      setLastName(userInfo?.lastName);
+      setSelectedColor(userInfo?.color);
     }
   }, [userInfo]);
-
+  
   const validateProfile = () => {
-    if(!firstName || !lastName) {
+    if (!firstName || !lastName) {
       toast.error("First Name and Last Name are required");
       return false;
     }
     return true;
   };
   const saveChanges = async () => {
-    if(validateProfile()) {
+    if (validateProfile()) {
       try {
         const response = await apiClient.post(SETUP_PROFILE_ROUTE, {
           firstName,
@@ -45,15 +45,13 @@ export default function Profile() {
           color: selectedColor,
         });
 
-        if(response.status === 200 && response.data) {
-          setUserInfo({...response.data.data})
+        if (response.status === 200 && response.data) {
+          setUserInfo({ ...response.data.data });
           toast.success("Profile updated successfully");
           navigate("/chat");
         }
-
       } catch (error) {
         console.error(error);
-        
       }
     }
     console.log("Saving changes");
@@ -62,11 +60,9 @@ export default function Profile() {
   const handleBackBtn = (e) => {
     e.preventDefault();
     console.log(userInfo);
-    if(userInfo.profilSetup)
-    navigate("/chat");
-    else
-    toast.error("Please complete your profile setup");
-  }
+    if (userInfo.profilSetup) navigate("/chat");
+    else toast.error("Please complete your profile setup");
+  };
 
   return (
     <div className="bg-[#1b1c24] h-[100vh] flex items-center justify-center flex-col gap-10">
@@ -147,7 +143,10 @@ export default function Profile() {
           </div>
         </div>
         <div className="w-full">
-          <Button className="h-16 w-full bg-purple-700 hover:bg-purple-900 transition-all duration-300" onClick={saveChanges}>
+          <Button
+            className="h-16 w-full bg-purple-700 hover:bg-purple-900 transition-all duration-300"
+            onClick={saveChanges}
+          >
             Save Changes
           </Button>
         </div>

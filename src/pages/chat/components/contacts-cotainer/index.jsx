@@ -3,27 +3,49 @@ import ProfileInfo from "./components/profile-info";
 import NewDM from "./components/new-dm";
 import { useEffect } from "react";
 import { apiClient } from "@/lib/api-client";
-import { GET_CONTACTS_FOR_DM_ROUTE } from "@/utils/constants";
+import {
+  GET_CONTACTS_FOR_DM_ROUTE,
+  GET_USER_CHANNELS_ROUTE,
+} from "@/utils/constants";
 import { useAppStore } from "@/store";
 import ContactList from "./components/contact-list";
+import CreateChannel from "./components/create-channel";
 
 const ContactsContainer = () => {
-  const {directMessagesContacts, setDirectMessagesContacts} = useAppStore();
+  const {
+    directMessagesContacts,
+    setDirectMessagesContacts,
+    channels,
+    setChannels,
+  } = useAppStore();
 
-  useEffect(()=> {
+  useEffect(() => {
     const getContacts = async () => {
-      try{
+      try {
         const response = await apiClient.get(GET_CONTACTS_FOR_DM_ROUTE);
-        if(response.data.data) {
+        if (response.data.data) {
           setDirectMessagesContacts(response.data.data);
         }
-      } catch(error) {
+      } catch (error) {
         console.log(error);
       }
-    }
+    };
+
+    const getChannels = async () => {
+      try {
+        const response = await apiClient.get(GET_USER_CHANNELS_ROUTE);
+        console.log(response.data.data);
+        if (response.data.data) {
+          setChannels(response.data.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
     getContacts();
-  }, [])
+    getChannels();
+  }, [setChannels, setDirectMessagesContacts]);
   return (
     <div className="relative md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-[#1b1c24] border-r-2 border-[#2f303b] w-full">
       <div className="pt-3">
@@ -41,9 +63,13 @@ const ContactsContainer = () => {
       <div className="my-5">
         <div className="flex items-center justify-between pr-10">
           <Title text={"Channels"} />
+          <CreateChannel />
+        </div>
+        <div className="max-h-[38vh] overflow-y-auto scrollbar-hidden">
+          <ContactList contacts={channels} isChannel={true} />
         </div>
       </div>
-      <ProfileInfo/>
+      <ProfileInfo />
     </div>
   );
 };
